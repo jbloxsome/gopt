@@ -1,6 +1,6 @@
 services:
   gopt:
-    build: .
+    build: ./docker
     volumes:
       - ./example:/app
       - ./gopt:/gopt
