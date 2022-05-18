@@ -1,3 +1,5 @@
 services:
   gopt:
     build: .
+    volumes:
+      - ./src:/app

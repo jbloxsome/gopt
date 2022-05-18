@@ -28,7 +28,7 @@ COPY setup-gotch.sh setup-gotch.sh
 RUN chmod +x setup-gotch.sh
 RUN export CUDA_VER=cpu && export GOTCH_VER=v0.7.0 && bash setup-gotch.sh
 
-COPY src /app
+RUN mkdir /app
 
 WORKDIR /app
 
