@@ -2,4 +2,5 @@ services:
   gopt:
     build: .
     volumes:
-      - ./src:/app
+      - ./example:/app
+      - ./gopt:/gopt

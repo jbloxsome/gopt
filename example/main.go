@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	
+
 	"github.com/jbloxsome/gopt/gopt"
 )
 
@@ -20,7 +20,7 @@ func init() {
 func main() {
 	flag.Parse()
 
-	gopt := GoPt{
+	gopt := gopt.GoPt{
 		Labels: []string{
 			"false",
 			"true",

@@ -18,7 +18,7 @@ func (gopt *GoPt) LoadModel(path string) {
 	// Create ImageNet object to use for input resizing
 	gopt.Imnet = vision.NewImageNet()
 
-	model, err := ts.ModuleLoadOnDevice(modelPath, gotch.CPU)
+	model, err := ts.ModuleLoadOnDevice(path, gotch.CPU)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,7 +27,7 @@ func (gopt *GoPt) LoadModel(path string) {
 
 func (gopt *GoPt) Predict(path string) string {
 	// Load the image file and resize it
-	image, err := gopt.Imnet.LoadImageAndResize224(imageFile)
+	image, err := gopt.Imnet.LoadImageAndResize224(path)
 	if err != nil {
 		log.Fatal(err)
 	}
