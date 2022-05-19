@@ -48,6 +48,7 @@ func (gopt *GoPt) LoadModel(path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	model.SetEval()
 	gopt.Model = model
 }
 
