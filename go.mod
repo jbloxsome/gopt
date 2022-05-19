@@ -1,4 +1,4 @@
-module github.com/jbloxsome/gopt/gopt
+module github.com/jbloxsome/gopt
 
 go 1.18
 
