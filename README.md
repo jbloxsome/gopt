@@ -74,7 +74,10 @@ func main() {
 
 	gopt.LoadModel(modelPath)
 
-	pred := gopt.Predict(imageFile)
+	pred, err := gopt.Predict(imageFile)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	fmt.Println(pred)
 }
