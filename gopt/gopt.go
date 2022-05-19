@@ -67,14 +67,18 @@ func (gopt *GoPt) Predict(path string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	defer image.MustDrop()
 
 	// Apply the forward pass of the model to get the logits.
-	output := image.MustUnsqueeze(int64(0), false).ApplyCModule(gopt.Model).MustSoftmax(-1, gotch.Float, true)
-	defer output.MustDrop()
+	unsqueezed := image.MustUnsqueeze(int64(0), false)
+	image.MustDrop()
+	raw_output := unsqueezed.ApplyCModule(gopt.Model)
+	unsqueezed.MustDrop()
+	output := raw_output.MustSoftmax(-1, gotch.Float, true)
+	raw_output.MustDrop()
 
 	// Convert to list of floats to represent label probabilities
 	probs := output.Vals().([]float32)
+	output.MustDrop()
 
 	maxVal := probs[0]
 	maxIndex := 0
