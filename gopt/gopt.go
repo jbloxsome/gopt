@@ -90,5 +90,7 @@ func (gopt *GoPt) Predict(path string) (string, error) {
 	}
 	maxVal = nil
 
-	return gopt.Labels[maxIndex], nil
+	label = &gopt.Labels[maxIndex]
+
+	return label, nil
 }
