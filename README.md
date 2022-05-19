@@ -1,4 +1,4 @@
-# GoPT
+# GoPt
 
 ## Overview
 GoPt is a small library for loading PyTorch image classification models into Golang code.
