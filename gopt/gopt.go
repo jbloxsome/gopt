@@ -88,6 +88,7 @@ func (gopt *GoPt) Predict(path string) (string, error) {
 			maxIndex = i
 		}
 	}
+	maxVal = nil
 
 	return gopt.Labels[maxIndex], nil
 }
