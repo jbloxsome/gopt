@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/jbloxsome/gopt/gopt"
+	"github.com/jbloxsome/gopt"
 )
 
 var (
@@ -27,7 +27,7 @@ func main() {
 		},
 	}
 
-	gopt.LoadModel(modelPath)
+	gopt.LoadModel("resnet34", modelPath)
 
 	pred, err := gopt.Predict(imageFile)
 	if err != nil {
