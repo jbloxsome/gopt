@@ -43,7 +43,7 @@ type GoPt struct {
 
 func (gopt *GoPt) LoadModel(modelName string, path string) {
 	url, ok := gotch.ModelUrls[modelName]
-	if != ok {
+	if !ok {
 		log.Fatal("Unsupported model %q\n", modelName)
 	}
 
