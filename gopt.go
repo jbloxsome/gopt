@@ -1,7 +1,6 @@
 package gopt
 
 import (
-	"log"
 	"net/http"
 	"errors"
 	"os"
@@ -79,7 +78,7 @@ func (gopt *GoPt) Predict(path string) (string, error) {
 
 	// Convert to list of floats to represent label probabilities
 	probs := output.Vals().([]float32)
-	output.MustDrop()
+	// output.MustDrop()
 
 	maxVal := probs[0]
 	maxIndex := 0
