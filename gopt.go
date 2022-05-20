@@ -40,15 +40,19 @@ type GoPt struct {
 	Imnet  *vision.ImageNet
 }
 
-func (gopt *GoPt) LoadModel(path string) {
-	// Create ImageNet object to use for input resizing
-	gopt.Imnet = vision.NewImageNet()
-
-	model, err := ts.ModuleLoadOnDevice(path, gotch.CPU)
+func NewGoPt(modelPath string, labels []string) (*GoPt, error) {
+	model, err := ts.ModuleLoadOnDevice(modelPath, gotch.CPU)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	gopt.Model = model
+
+	imageNet := vision.NewImageNet()
+
+	return &GoPt{
+		Model:  model,
+		Labels: labels,
+		Imnet: imageNet,
+	}, nil
 }
 
 func (gopt *GoPt) Predict(path string) (string, error) {
@@ -69,16 +73,13 @@ func (gopt *GoPt) Predict(path string) (string, error) {
 	}
 
 	// Apply the forward pass of the model to get the logits.
-	unsqueezed := image.MustUnsqueeze(int64(0), false)
-	image.MustDrop()
-	raw_output := unsqueezed.ApplyCModule(gopt.Model)
-	unsqueezed.MustDrop()
+	input := image.MustUnsqueeze(0, false)
+	raw_output := input.ApplyCModule(gopt.Model)
 	output := raw_output.MustSoftmax(-1, gotch.Float, true)
-	raw_output.MustDrop()
 
 	// Convert to list of floats to represent label probabilities
 	probs := output.Vals().([]float32)
-	// output.MustDrop()
+	output.MustDrop()
 
 	maxVal := probs[0]
 	maxIndex := 0
