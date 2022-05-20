@@ -9,7 +9,6 @@ import (
 	"github.com/sugarme/gotch"
 	"github.com/sugarme/gotch/ts"
 	"github.com/sugarme/gotch/vision"
-	"github.com/sugarme/gotch/pickle"
 )
 
 func GetFileContentType(path string) (string, error) {
@@ -41,24 +40,14 @@ type GoPt struct {
 	Imnet  *vision.ImageNet
 }
 
-func (gopt *GoPt) LoadModel(modelName string, path string) {
-	url, ok := gotch.ModelUrls[modelName]
-	if !ok {
-		log.Fatal("Unsupported model %q\n", modelName)
-	}
-
-	modelFile, err := gotch.CachedPath(url)
-	if err != nil {
-		log.Fatal("Error loading model")
-	}
-
-	err = pickle.LoadInfo(modelFile)
-	if err != nil {
-		log.Fatal("Error loading model weights")
-	}
-
+func (gopt *GoPt) LoadModel(path string) {
 	// Create ImageNet object to use for input resizing
 	gopt.Imnet = vision.NewImageNet()
+
+	model, err := ts.ModuleLoadOnDevice(path, gotch.CPU)
+	if err != nil {
+		log.Fatal(err)
+	}
 	gopt.Model = model
 }
 
@@ -74,7 +63,7 @@ func (gopt *GoPt) Predict(path string) (string, error) {
 	}
 
 	// Load the image file and resize it
-	image, err := gopt.Imnet.LoadImageAndResize(path, int64(224), int64(224))
+	image, err := gopt.Imnet.LoadImageAndResize224(path)
 	if err != nil {
 		return "", err
 	}
@@ -88,14 +77,12 @@ func (gopt *GoPt) Predict(path string) (string, error) {
 	raw_output.MustDrop()
 
 	// Convert to list of floats to represent label probabilities
-	probs := output.Vals()
+	probs := output.Vals().([]float32)
 	output.MustDrop()
-	probs32 := probs.([]float32)
-	probs.MustDrop()
 
-	maxVal := probs32[0]
+	maxVal := probs[0]
 	maxIndex := 0
-	for i, v := range probs32 {
+	for i, v := range probs {
 		if (v > maxVal) {
 			maxVal = v
 			maxIndex = i
@@ -103,7 +90,5 @@ func (gopt *GoPt) Predict(path string) (string, error) {
 	}
 	maxVal = nil
 
-	label = &gopt.Labels[maxIndex]
-
-	return label, nil
+	return gopt.Labels[maxIndex], nil
 }
