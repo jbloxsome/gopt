@@ -61,7 +61,7 @@ func (gopt *GoPt) Predict(path string) (string, error) {
 		return "", err
 	}
 
-	if contentType != "image/jpeg" {
+	if contentType != "image/jpeg" && contentType != "image/png" && contentType != "image/gif" {
 		return "", errors.New("must be an image file")
 	}
 
