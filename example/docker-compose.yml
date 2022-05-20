@@ -1,0 +1,5 @@
+services:
+  gopt:
+    build: ./docker
+    volumes:
+      - ./code:/app
