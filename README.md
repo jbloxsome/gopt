@@ -65,16 +65,17 @@ func init() {
 func main() {
 	flag.Parse()
 
-	gopt := gopt.GoPt{
-		Labels: []string{
-			"false",
-			"true",
-		},
+	labels := []string{
+		"false",
+		"true",
 	}
 
-	gopt.LoadModel(modelPath)
+	model, err := gopt.NewGoPt(modelPath, labels)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	pred, err := gopt.Predict(imageFile)
+	pred, err := model.Predict(imageFile)
 	if err != nil {
 		fmt.Println(err)
 	}
